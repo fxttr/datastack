@@ -1,0 +1,7 @@
+#! /bin/sh
+
+echo `pyspark --version` 
+
+export PYSPARK_DRIVER_PYTHON=jupyter
+export PYSPARK_DRIVER_PYTHON_OPTS="lab --no-browser --notebook-dir=/var/lib/prometheus_stack/notebooks --ip='*' --NotebookApp.token='' --NotebookApp.password='' --port=8888 --no-browser --allow-root"
+pyspark

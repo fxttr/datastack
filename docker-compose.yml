@@ -1,0 +1,353 @@
+services:
+
+### Clickhouse ###
+  clickhouse-01:
+    image: "clickhouse/clickhouse-server:${CHVER:-latest}"
+    user: "101:101"
+    container_name: clickhouse-01
+    hostname: clickhouse-01
+    cap_add:
+      - SYS_NICE
+      - NET_ADMIN
+      - IPC_LOCK
+    ulimits:
+      nofile: 
+        soft: 262144
+        hard: 262144
+    volumes:
+      - ${PWD}/clickhouse/volumes/clickhouse-01/etc/clickhouse-server/config.d/config.xml:/etc/clickhouse-server/config.d/config.xml
+      - ${PWD}/clickhouse/volumes/clickhouse-01/etc/clickhouse-server/users.d/users.xml:/etc/clickhouse-server/users.d/users.xml
+      - clickhouse_data_1:/var/lib/clickhouse/
+      - clickhouse_logs_1:/var/log/clickhouse-server/
+    ports:
+      - "8123:8123"
+      - "9900:9000"
+    depends_on:
+      - clickhouse-keeper-01
+      - clickhouse-keeper-02
+      - clickhouse-keeper-03
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:8123/ping || exit 1
+      interval: 15s
+      timeout: 10s
+      retries: 10
+    restart:
+      always
+
+  clickhouse-02:
+    image: "clickhouse/clickhouse-server:${CHVER:-latest}"
+    user: "101:101"
+    container_name: clickhouse-02
+    hostname: clickhouse-02
+    cap_add:
+      - SYS_NICE
+      - NET_ADMIN
+      - IPC_LOCK
+    ulimits:
+      nofile: 
+        soft: 262144
+        hard: 262144
+    volumes:
+      - ${PWD}/clickhouse/volumes/clickhouse-02/etc/clickhouse-server/config.d/config.xml:/etc/clickhouse-server/config.d/config.xml
+      - ${PWD}/clickhouse/volumes/clickhouse-02/etc/clickhouse-server/users.d/users.xml:/etc/clickhouse-server/users.d/users.xml
+      - clickhouse_data_2:/var/lib/clickhouse/
+      - clickhouse_logs_2:/var/log/clickhouse-server/
+    ports:
+      - "8124:8123"
+      - "9901:9000"
+    depends_on:
+      - clickhouse-keeper-01
+      - clickhouse-keeper-02
+      - clickhouse-keeper-03
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:8123/ping || exit 1
+      interval: 15s
+      timeout: 10s
+      retries: 10
+    restart:
+      always
+
+  clickhouse-03:
+    image: "clickhouse/clickhouse-server:${CHVER:-latest}"
+    user: "101:101"
+    container_name: clickhouse-03
+    hostname: clickhouse-03
+    cap_add:
+      - SYS_NICE
+      - NET_ADMIN
+      - IPC_LOCK
+    ulimits:
+      nofile: 
+        soft: 262144
+        hard: 262144
+    volumes:
+      - ${PWD}/clickhouse/volumes/clickhouse-03/etc/clickhouse-server/config.d/config.xml:/etc/clickhouse-server/config.d/config.xml
+      - ${PWD}/clickhouse/volumes/clickhouse-03/etc/clickhouse-server/users.d/users.xml:/etc/clickhouse-server/users.d/users.xml
+      - clickhouse_data_3:/var/lib/clickhouse/
+      - clickhouse_logs_3:/var/log/clickhouse-server/
+    ports:
+      - "8125:8123"
+      - "9902:9000"
+    depends_on:
+      - clickhouse-keeper-01
+      - clickhouse-keeper-02
+      - clickhouse-keeper-03
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:8123/ping || exit 1
+      interval: 15s
+      timeout: 10s
+      retries: 10
+    restart:
+      always
+
+  clickhouse-04:
+    image: "clickhouse/clickhouse-server:${CHVER:-latest}"
+    user: "101:101"
+    container_name: clickhouse-04
+    hostname: clickhouse-04
+    cap_add:
+      - SYS_NICE
+      - NET_ADMIN
+      - IPC_LOCK
+    ulimits:
+      nofile: 
+        soft: 262144
+        hard: 262144
+    volumes:
+      - ${PWD}/clickhouse/volumes/clickhouse-04/etc/clickhouse-server/config.d/config.xml:/etc/clickhouse-server/config.d/config.xml
+      - ${PWD}/clickhouse/volumes/clickhouse-04/etc/clickhouse-server/users.d/users.xml:/etc/clickhouse-server/users.d/users.xml
+      - clickhouse_data_4:/var/lib/clickhouse/
+      - clickhouse_logs_4:/var/log/clickhouse-server/
+    ports:
+        - "8126:8123"
+        - "9903:9000"
+    depends_on:
+      - clickhouse-keeper-01
+      - clickhouse-keeper-02
+      - clickhouse-keeper-03
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:8123/ping || exit 1
+      interval: 15s
+      timeout: 10s
+      retries: 10
+    restart:
+      always
+
+  clickhouse-keeper-01:
+    image: "clickhouse/clickhouse-keeper:${CHKVER:-latest-alpine}"
+    user: "101:101"
+    container_name: clickhouse-keeper-01
+    hostname: clickhouse-keeper-01
+    volumes:
+     - ${PWD}/clickhouse/volumes/clickhouse-keeper-01/etc/clickhouse-keeper/keeper_config.xml:/etc/clickhouse-keeper/keeper_config.xml
+    ports:
+        - "127.0.0.1:9181:9181"
+    restart:
+      always
+
+  clickhouse-keeper-02:
+    image: "clickhouse/clickhouse-keeper:${CHKVER:-latest-alpine}"
+    user: "101:101"
+    container_name: clickhouse-keeper-02
+    hostname: clickhouse-keeper-02
+    volumes:
+     - ${PWD}/clickhouse/volumes/clickhouse-keeper-02/etc/clickhouse-keeper/keeper_config.xml:/etc/clickhouse-keeper/keeper_config.xml
+    ports:
+        - "127.0.0.1:9182:9181"
+    restart:
+      always
+
+  clickhouse-keeper-03:
+    image: "clickhouse/clickhouse-keeper:${CHKVER:-latest-alpine}"
+    user: "101:101"
+    container_name: clickhouse-keeper-03
+    hostname: clickhouse-keeper-03
+    volumes:
+     - ${PWD}/clickhouse/volumes/clickhouse-keeper-03/etc/clickhouse-keeper/keeper_config.xml:/etc/clickhouse-keeper/keeper_config.xml
+    ports:
+        - "127.0.0.1:9183:9181"
+    restart:
+      always
+      
+### MinIO ###
+  minio:
+    hostname: minio
+    image: 'minio/minio'
+    container_name: minio
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - ./data/minio:/data
+    environment:
+      - MINIO_ROOT_USER=minio
+      - MINIO_ROOT_PASSWORD=minio123
+    command: server /data --console-address ":9001"
+    networks:
+      - ndsnet
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart:
+      always
+
+  mc:
+    image: minio/mc
+    container_name: mc
+    hostname: mc
+    environment:
+      - AWS_ACCESS_KEY_ID=minio
+      - AWS_SECRET_ACCESS_KEY=minio123
+      - AWS_REGION=us-east-1
+    networks:
+      - ndsnet
+    entrypoint: >
+      /bin/sh -c "
+      until (/usr/bin/mc config host add minio http://minio:9000 minio minio123) do echo '...waiting...' && sleep 1; done;
+      /usr/bin/mc mb minio/warehouse;
+      /usr/bin/mc policy set public minio/warehouse;
+      exit 0;
+      "    
+    depends_on:
+      minio:
+        condition: service_healthy  
+    restart:
+      always
+  
+  metastore_db:
+    image: postgres:16
+    hostname: metastore_db
+    environment:
+      POSTGRES_USER: hive
+      POSTGRES_PASSWORD: hive123
+      POSTGRES_DB: metastore
+    volumes:
+      - hive_metastore_db_data:/var/lib/postgresql/data
+      - ./metastore/init.sql:/docker-entrypoint-initdb.d/init.sql
+    expose:
+      - 5432
+    healthcheck:
+      test: ["CMD", "psql", "-U", "${POSTGRES_USER}", "${POSTGRES_DB}"]
+
+  hive-metastore:
+    build: metastore/
+    hostname: hive-metastore
+    ports:
+      - '9083:9083' # Metastore Thrift
+    volumes:
+      - hive_metastore_data:/opt/hive/data/warehouse
+    environment:
+      DATABASE_HOST: metastore_db
+      DATABASE_DB: metastore
+      DATABASE_USER: hive
+      DATABASE_PASSWORD: hive123
+      S3_ENDPOINT_URL: http://minio:9000
+      S3_ACCESS_KEY: minio
+      S3_SECRET_KEY: minio123
+    depends_on:
+      -  metastore_db
+        #condition: service_healthy
+    healthcheck:
+      test: bash -c "exec 6<> /dev/tcp/localhost/9083"
+
+  spark:
+    build: spark/
+    container_name: spark
+    environment:
+      - AWS_ACCESS_KEY_ID=minio
+      - AWS_SECRET_ACCESS_KEY=minio123
+      - AWS_REGION=us-east-1
+    volumes:
+      - ./data/html:/var/lib/prometheus_stack/html
+      - ./data/stage:/var/lib/prometheus_stack/stage
+      - ./data/spark/notebooks:/var/lib/prometheus_stack/notebooks
+      - ./projects:/var/lib/prometheus_stack/projects
+    ports:
+      - '8888:8888' # Spark notebook port
+      - '7077:7077' # Spark port
+      - '8061:8061' # Spark master web ui port
+      - '8062:8062' # Spark worker web ui port
+      - '10000:10000' # Thrift ODBC/JDBC port
+      - '10009:10009' # Kyuubi JDBC port
+      - '18080:18080' # Spark history web ui port
+      - '3070:3070' # Dagster web ui port
+    networks:
+      ndsnet:
+        aliases:
+          - dagster
+          - dbt
+          - metastore
+          - spark
+    command: 
+      - notebook
+    depends_on:
+      clickhouse-01:
+        condition: service_healthy
+      clickhouse-02:
+        condition: service_healthy
+      clickhouse-03:
+        condition: service_healthy
+      clickhouse-04:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      hive-metastore:
+        condition: service_healthy
+    restart:
+      always
+  
+  trino:
+    image: "trinodb/trino:453"
+    container_name: trino
+    volumes:
+      - ./data/stage:/var/lib/prometheus_stack/stage
+      - ./trino/etc:/usr/lib/trino/etc:ro
+      - ./trino/catalog:/etc/trino/catalog
+    ports:
+      - '8060:8060' # Trino
+      - '8063:8063' # Trino
+    networks:
+      ndsnet:
+        aliases:
+          - trino
+    depends_on:
+      clickhouse-01:
+        condition: service_healthy
+      clickhouse-02:
+        condition: service_healthy
+      clickhouse-03:
+        condition: service_healthy
+      clickhouse-04:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 20000
+        hard: 40000
+    restart:
+      always
+      
+networks:
+  ndsnet:
+    driver: bridge
+  openmetadata_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.16.240.0/24"
+
+volumes:
+  hive_metastore_db_data:
+  hive_metastore_data:
+  clickhouse_data_1:
+  clickhouse_data_2:
+  clickhouse_data_3:
+  clickhouse_data_4:
+  clickhouse_logs_1:
+  clickhouse_logs_2:
+  clickhouse_logs_3:
+  clickhouse_logs_4:
