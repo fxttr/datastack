@@ -137,4 +137,4 @@ run_migrations
 # configure & start metastore (in foreground)
 generate_metastore_site_config /opt/hive-metastore/conf/metastore-site.xml
 generate_core_site_config /opt/hadoop/etc/hadoop/core-site.xml
-/opt/hive-metastore/bin/hive
+/opt/hive-metastore/bin/hive --service metastore
