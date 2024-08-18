@@ -1,4 +1,4 @@
-FROM openjdk:23-slim
+FROM eclipse-temurin:11-jre-jammy
 
 # see https://hadoop.apache.org/releases.html
 ARG HADOOP_VERSION=3.4.0

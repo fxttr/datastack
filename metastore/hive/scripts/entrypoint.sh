@@ -20,18 +20,18 @@ generate_database_config(){
   <name>javax.jdo.option.ConnectionPassword</name>
   <value>${DATABASE_PASSWORD}</value>
 </property>
-   <property>
-      <name>datanucleus.autoCreateSchema</name>
-      <value>true</value>
-   </property>
-   <property>
-      <name>datanucleus.fixedDatastore</name>
-      <value>true</value>
-   </property>
-   <property>
-      <name>datanucleus.autoCreateTables</name>
-      <value>True</value>
-   </property>
+<property>
+  <name>datanucleus.autoCreateSchema</name>
+  <value>true</value>
+</property>
+<property>
+  <name>datanucleus.fixedDatastore</name>
+  <value>true</value>
+</property>
+<property>
+  <name>datanucleus.autoCreateTables</name>
+  <value>True</value>
+</property>
 XML
 }
 
@@ -59,7 +59,7 @@ generate_metastore_site_config(){
   $database_config
   <property>
     <name>metastore.warehouse.dir</name>
-    <value>s3a://minio/warehouse</value>
+    <value>s3a://192.168.0.200/metastore</value>
   </property>
   <property>
     <name>metastore.thrift.port</name>
@@ -70,23 +70,10 @@ XML
 }
 
 generate_s3_custom_endpoint(){
-  if [ -z "$S3_ENDPOINT_URL" ]; then
-    echo ""
-    return 0
-  fi
-
   cat << XML
 <property>
   <name>fs.s3a.endpoint</name>
-  <value>${S3_ENDPOINT_URL}</value>
-</property>
-<property>
-  <name>fs.s3a.access.key</name>
-  <value>${AWS_ACCESS_KEY_ID:-}</value>
-</property>
-<property>
-  <name>fs.s3a.secret.key</name>
-  <value>${AWS_SECRET_KEY:-}</value>
+  <value>s3a://192.168.0.200/lake</value>
 </property>
 <property>
   <name>fs.s3a.connection.ssl.enabled</name>
@@ -105,7 +92,7 @@ generate_core_site_config(){
 <configuration>
   <property>
       <name>fs.defaultFS</name>
-      <value>s3a://minio</value>
+      <value>s3a://192.168.0.200</value>
   </property>
   <property>
       <name>fs.s3a.impl</name>
@@ -118,6 +105,12 @@ generate_core_site_config(){
   $custom_endpoint_configs
 </configuration>
 XML
+}
+
+generate_log4j_properties() {
+  cat << EOL > "$1"
+hive.root.logger=DEBUG,console
+EOL
 }
 
 run_migrations(){
@@ -137,4 +130,7 @@ run_migrations
 # configure & start metastore (in foreground)
 generate_metastore_site_config /opt/hive-metastore/conf/metastore-site.xml
 generate_core_site_config /opt/hadoop/etc/hadoop/core-site.xml
-/opt/hive-metastore/bin/hive --service metastore
+generate_log4j_properties /opt/hive-metastore/conf/hive-exec-log4j2.properties
+generate_log4j_properties /opt/hive-metastore/conf/hive-log4j2.properties
+/opt/hive-metastore/bin/hive --service metastore -v &
+/opt/hive-metastore/bin/hive --service hiveserver2 --hiveconf hive.server2.thrift.port=10000
