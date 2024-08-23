@@ -1,2 +1,2 @@
-# k8datastack
+# Datastack
 My data stack for my homelab
