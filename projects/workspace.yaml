@@ -1,2 +1,0 @@
-load_from:
-  - python_file: kpi26-time2signature/dagster/kpi26-time2signature.py

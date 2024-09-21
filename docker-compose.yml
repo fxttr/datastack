@@ -1,39 +1,15 @@
 services:
-  spark:
-    build: spark/
-    container_name: spark
-    environment:
-      - AWS_ACCESS_KEY_ID=minio
-      - AWS_SECRET_ACCESS_KEY=minio123
-      - AWS_REGION=us-east-1
+  playground:
+    build: playground/
+    container_name: playground
     volumes:
-      - ./data/html:/var/lib/prometheus_stack/html
-      - ./data/stage:/var/lib/prometheus_stack/stage
-      - ./data/spark/notebooks:/var/lib/prometheus_stack/notebooks
-      - ./projects:/var/lib/prometheus_stack/projects
+      - ./data/playground/notebooks:/var/lib/fxttr/notebooks
     ports:
-      - '8888:8888' # Spark notebook port
-      - '7077:7077' # Spark port
-      - '8061:8061' # Spark master web ui port
-      - '8062:8062' # Spark worker web ui port
-      - '10009:10009' # Kyuubi JDBC port
-      - '18080:18080' # Spark history web ui port
-      - '3070:3070' # Dagster web ui port
+      - '8888:8888'
     networks:
       - public
     command: 
       - notebook
-    depends_on:
-      clickhouse-01:
-        condition: service_healthy
-      clickhouse-02:
-        condition: service_healthy
-      clickhouse-03:
-        condition: service_healthy
-      clickhouse-04:
-        condition: service_healthy
-      hive_metastore:
-        condition: service_healthy
     restart:
       always
 
@@ -41,31 +17,19 @@ services:
     build: trino/
     container_name: trino
     volumes:
-      - ./data/stage:/var/lib/ngods/stage
       - ./trino/conf/trino.pass:/trino.pass
       - ./trino/conf/cert.pem:/cert.pem
     ports:
-      - '8060:8060'
-      - '8063:8063'
+      - '8060:8060' # Trino
+      - '8063:8063' # Trino
     networks:
       - public
-    depends_on:
-      clickhouse-01:
-        condition: service_healthy
-      clickhouse-02:
-        condition: service_healthy
-      clickhouse-03:
-        condition: service_healthy
-      clickhouse-04:
-        condition: service_healthy
-      hive_metastore:
-        condition: service_healthy
     ulimits:
       nproc: 65535
       nofile:
         soft: 20000
         hard: 40000
-  
+
 networks:
   public:
     driver: bridge

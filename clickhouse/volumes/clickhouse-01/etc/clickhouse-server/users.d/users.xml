@@ -12,8 +12,8 @@
         <default>
             <access_management>1</access_management>
             <password remove="1"/>
-            <password_sha256_hex>9ea44944da9e341f410b296bcb13bd33252e10ede9f82752dd4f192ac0935cda</password_sha256_hex>
-            <profile>default</profile>
+            <password_sha256_hex from_env="CLICKHOUSE_PASSWORD_SHA256"/>
+            <profile from_env="CLICKHOUSE_USERNAME"/>
             <networks>
                 <ip>::/0</ip>
             </networks>

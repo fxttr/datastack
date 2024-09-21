@@ -1,6 +1,6 @@
 services:
   clickhouse-01:
-    image: "clickhouse/clickhouse-server:${CHVER:-latest}"
+    image: "clickhouse/clickhouse-server:24"
     container_name: clickhouse-01
     hostname: clickhouse-01
     cap_add:
@@ -18,7 +18,6 @@ services:
       - ${PWD}/clickhouse/volumes/clickhouse-01/etc/clickhouse-server/config.d/config.xml:/etc/clickhouse-server/config.d/config.xml
       - ${PWD}/clickhouse/volumes/clickhouse-01/etc/clickhouse-server/users.d/users.xml:/etc/clickhouse-server/users.d/users.xml
       - clickhouse_data_1:/var/lib/clickhouse/
-      - clickhouse_logs_1:/var/log/clickhouse-server/
     ports:
       - "8123:8123"
       - "9900:9000"
@@ -35,7 +34,7 @@ services:
       always
 
   clickhouse-02:
-    image: "clickhouse/clickhouse-server:${CHVER:-latest}"
+    image: "clickhouse/clickhouse-server:24"
     container_name: clickhouse-02
     hostname: clickhouse-02
     cap_add:
@@ -53,7 +52,6 @@ services:
       - ${PWD}/clickhouse/volumes/clickhouse-02/etc/clickhouse-server/config.d/config.xml:/etc/clickhouse-server/config.d/config.xml
       - ${PWD}/clickhouse/volumes/clickhouse-02/etc/clickhouse-server/users.d/users.xml:/etc/clickhouse-server/users.d/users.xml
       - clickhouse_data_2:/var/lib/clickhouse/
-      - clickhouse_logs_2:/var/log/clickhouse-server/
     ports:
       - "8124:8123"
       - "9901:9000"
@@ -70,7 +68,7 @@ services:
       always
 
   clickhouse-03:
-    image: "clickhouse/clickhouse-server:${CHVER:-latest}"
+    image: "clickhouse/clickhouse-server:24"
     container_name: clickhouse-03
     hostname: clickhouse-03
     cap_add:
@@ -88,7 +86,6 @@ services:
       - ${PWD}/clickhouse/volumes/clickhouse-03/etc/clickhouse-server/config.d/config.xml:/etc/clickhouse-server/config.d/config.xml
       - ${PWD}/clickhouse/volumes/clickhouse-03/etc/clickhouse-server/users.d/users.xml:/etc/clickhouse-server/users.d/users.xml
       - clickhouse_data_3:/var/lib/clickhouse/
-      - clickhouse_logs_3:/var/log/clickhouse-server/
     ports:
       - "8125:8123"
       - "9902:9000"
@@ -105,7 +102,7 @@ services:
       always
 
   clickhouse-04:
-    image: "clickhouse/clickhouse-server:${CHVER:-latest}"
+    image: "clickhouse/clickhouse-server:24"
     container_name: clickhouse-04
     hostname: clickhouse-04
     cap_add:
@@ -123,7 +120,6 @@ services:
       - ${PWD}/clickhouse/volumes/clickhouse-04/etc/clickhouse-server/config.d/config.xml:/etc/clickhouse-server/config.d/config.xml
       - ${PWD}/clickhouse/volumes/clickhouse-04/etc/clickhouse-server/users.d/users.xml:/etc/clickhouse-server/users.d/users.xml
       - clickhouse_data_4:/var/lib/clickhouse/
-      - clickhouse_logs_4:/var/log/clickhouse-server/
     ports:
         - "8126:8123"
         - "9903:9000"
@@ -140,7 +136,7 @@ services:
       always
 
   clickhouse-keeper-01:
-    image: "clickhouse/clickhouse-keeper:${CHKVER:-latest-alpine}"
+    image: "clickhouse/clickhouse-keeper:24"
     container_name: clickhouse-keeper-01
     hostname: clickhouse-keeper-01
     volumes:
@@ -153,7 +149,7 @@ services:
       - clickhouse-internal
 
   clickhouse-keeper-02:
-    image: "clickhouse/clickhouse-keeper:${CHKVER:-latest-alpine}"
+    image: "clickhouse/clickhouse-keeper:24"
     container_name: clickhouse-keeper-02
     hostname: clickhouse-keeper-02
     volumes:
@@ -166,7 +162,7 @@ services:
       - clickhouse-internal
 
   clickhouse-keeper-03:
-    image: "clickhouse/clickhouse-keeper:${CHKVER:-latest-alpine}"
+    image: "clickhouse/clickhouse-keeper:24"
     container_name: clickhouse-keeper-03
     hostname: clickhouse-keeper-03
     volumes:
@@ -186,7 +182,3 @@ volumes:
   clickhouse_data_2:
   clickhouse_data_3:
   clickhouse_data_4:
-  clickhouse_logs_1:
-  clickhouse_logs_2:
-  clickhouse_logs_3:
-  clickhouse_logs_4:

@@ -3,7 +3,8 @@ FROM eclipse-temurin:22-jre-jammy
 ENV TRINO_HOME=/opt/trino
 ENV BIN_DIR=/usr/bin
 
-ENV DATA_STAGE_DIR=/var/lib/ngods/stage
+ENV TRINO_VERSION=453
+ENV DATA_STAGE_DIR=/var/lib/fxttr/stage
 ENV TRINO_DATA_DIR=/var/lib/trino/data
 ENV INSTALL_DIR=/tmp/install
 
@@ -28,9 +29,9 @@ COPY conf/requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt \
     && rm requirements.txt
 
-RUN curl https://repo1.maven.org/maven2/io/trino/trino-server/453/trino-server-453.tar.gz -Lo trino-server-453.tar.gz \
-    && tar xvzf trino-server-453.tar.gz --directory ${TRINO_HOME} --strip-components 1 \
-    && rm trino-server-453.tar.gz 
+RUN curl https://repo1.maven.org/maven2/io/trino/trino-server/${TRINO_VERSION}/trino-server-${TRINO_VERSION}.tar.gz -Lo trino-server-${TRINO_VERSION}.tar.gz \
+    && tar xvzf trino-server-${TRINO_VERSION}.tar.gz --directory ${TRINO_HOME} --strip-components 1 \
+    && rm trino-server-${TRINO_VERSION}.tar.gz 
 
 WORKDIR ${TRINO_HOME}
 

@@ -1,0 +1,8 @@
+#! /bin/sh
+
+echo `pyspark --version` 
+
+export MASTER=spark://spark:7077
+export PYSPARK_DRIVER_PYTHON=jupyter
+export PYSPARK_DRIVER_PYTHON_OPTS="lab --no-browser --notebook-dir=/var/lib/fxttr/notebooks --ip='*' --NotebookApp.token='' --NotebookApp.password='' --port=8888 --no-browser --allow-root --NotebookApp.iopub_data_rate_limit=1.0e10"
+pyspark
