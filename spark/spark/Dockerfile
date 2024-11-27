@@ -1,6 +1,7 @@
 # syntax=docker/dockerfile:1
-FROM sparkbase as spark
+FROM sparkbase:latest
 
-COPY ./entrypoint.sh .
+COPY ./scripts/entrypoint.sh .
+RUN chmod u+x ./entrypoint.sh 
 
 ENTRYPOINT [ "./entrypoint.sh" ]

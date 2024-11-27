@@ -8,28 +8,25 @@ services:
       - public
       - nessie-internal
     environment:
-      - QUARKUS_HTTP_PORT=19120
-      - QUARKUS_PROFILE=prod
-      - QUARKUS_DATASOURCE_JDBC_URL=jdbc:postgresql://nessie-db:5432/${NESSIE_DATABASE}
-      - QUARKUS_DATASOURCE_USERNAME=${NESSIE_DATABASE_USERNAME}
-      - QUARKUS_DATASOURCE_PASSWORD=${NESSIE_DATABASE_PASSWORD}
-      - NESSIE_VERSION_STORE_TYPE=JDBC
+      QUARKUS_HTTP_PORT: 19120
+      QUARKUS_PROFILE: prod
+      NESSIE_VERSION_STORE_TYPE: JDBC
     volumes:
       - nessie_data:/var/lib/nessie/data
+    env_file:
+      - env/nessie.env
 
   nessie-db:
     image: postgres:16
     hostname: nessie-db
-    environment:
-      POSTGRES_DB: ${NESSIE_DATABASE}
-      POSTGRES_USER: ${NESSIE_DATABASE_USERNAME}
-      POSTGRES_PASSWORD: ${NESSIE_DATABASE_PASSWORD}
     expose:
       - 5432
     networks:
       - nessie-internal
     volumes:
       - nessie_db_data:/var/lib/postgresql/data
+    env_file:
+      - env/nessie.env
 
 networks:
   nessie-internal:

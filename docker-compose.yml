@@ -3,6 +3,7 @@ services:
     build: playground/
     container_name: playground
     volumes:
+      - ./data/stage:/var/lib/fxttr/stage
       - ./data/playground/notebooks:/var/lib/fxttr/notebooks
     ports:
       - '8888:8888'
@@ -17,6 +18,7 @@ services:
     build: trino/
     container_name: trino
     volumes:
+      - ./data/stage:/var/lib/fxttr/stage
       - ./trino/conf/trino.pass:/trino.pass
       - ./trino/conf/cert.pem:/cert.pem
     ports:
@@ -29,6 +31,9 @@ services:
       nofile:
         soft: 20000
         hard: 40000
+    env_file:
+      - env/clickhouse.env
+      - env/minio.env
 
 networks:
   public:

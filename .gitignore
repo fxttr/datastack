@@ -1,2 +1,14 @@
-.ipynb_checkpoints
-.secrets
+.ipynb_checkpoints/
+__pycache__/
+.logs_queue/
+.nux/
+.telemetry/
+pipelines/storage/
+pipelines/schedules/
+pipelines/history/
+metastore_db/
+env/
+!doc/env/
+*.log
+.venv/
+.direnv/

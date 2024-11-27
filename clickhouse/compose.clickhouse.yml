@@ -32,6 +32,8 @@ services:
       retries: 10
     restart:
       always
+    env_file:
+      - env/minio.env
 
   clickhouse-02:
     image: "clickhouse/clickhouse-server:24"
@@ -66,6 +68,8 @@ services:
       retries: 10
     restart:
       always
+    env_file:
+      - env/minio.env
 
   clickhouse-03:
     image: "clickhouse/clickhouse-server:24"
@@ -100,6 +104,8 @@ services:
       retries: 10
     restart:
       always
+    env_file:
+      - env/minio.env
 
   clickhouse-04:
     image: "clickhouse/clickhouse-server:24"
@@ -134,6 +140,8 @@ services:
       retries: 10
     restart:
       always
+    env_file:
+      - env/minio.env
 
   clickhouse-keeper-01:
     image: "clickhouse/clickhouse-keeper:24"

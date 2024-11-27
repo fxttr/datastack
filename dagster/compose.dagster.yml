@@ -1,17 +1,19 @@
 services:
   dagster_postgresql:
     image: postgres:16
-    container_name: dagster-postgresql
-    environment:
-      DAGSTER_POSTGRES_USER: ${DAGSTER_DATABASE_USERNAME}
-      DAGSTER_POSTGRES_PASSWORD: ${DAGSTER_DATABASE_PASSWORD}
-      DAGSTER_POSTGRES_DB: ${DAGSTER_DATABASE}
+    container_name: dagster_postgresql
+    hostname: dagster_postgresql
     networks:
       - dagster-internal
+      - public
+    env_file:
+      - env/dagster.env
+      - env/pipeline.env
 
   dagster_webserver:
     build: dagster/dagster
     container_name: dagster_webserver
+    hostname: dagster_webserver
     restart: on-failure
     entrypoint:
       - dagster-webserver
@@ -25,11 +27,8 @@ services:
       - "3070"
     ports:
       - "3070:3070"
-    environment:
-      DAGSTER_POSTGRES_USER: ${DAGSTER_DATABASE_USERNAME}
-      DAGSTER_POSTGRES_PASSWORD: ${DAGSTER_DATABASE_PASSWORD}
-      DAGSTER_POSTGRES_DB: ${DAGSTER_DATABASE}
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - /tmp/io_manager_storage:/tmp/io_manager_storage
       - ./pipelines/home:/opt/dagster/dagster_home/
     networks:
@@ -37,25 +36,30 @@ services:
       - public
     depends_on:
       - dagster_postgresql
+    env_file:
+      - env/dagster.env
+      - env/pipeline.env
 
   dagster_daemon:
     build: dagster/dagster
     entrypoint:
       - dagster-daemon
       - run
-    container_name: dagster-daemon
+    container_name: dagster_daemon
+    hostname: dagster_daemon
     restart: on-failure
-    environment:
-      DAGSTER_POSTGRES_USER: ${DAGSTER_DATABASE_USERNAME}
-      DAGSTER_POSTGRES_PASSWORD: ${DAGSTER_DATABASE_PASSWORD}
-      DAGSTER_POSTGRES_DB: ${DAGSTER_DATABASE}
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - /tmp/io_manager_storage:/tmp/io_manager_storage
       - ./pipelines/home:/opt/dagster/dagster_home/
     networks:
       - dagster-internal
+      - public
     depends_on:
       - dagster_postgresql
+    env_file:
+      - env/dagster.env
+      - env/pipeline.env
 
 networks:
   dagster-internal:
