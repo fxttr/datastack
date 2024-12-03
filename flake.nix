@@ -13,6 +13,8 @@
     {
       devShell = pkgs.mkShell {
         buildInputs = [
+          pkgs.k9s
+          pkgs.opentofu
           pkgs.python3
           pkgs.python3Packages.virtualenv
         ];

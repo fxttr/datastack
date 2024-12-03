@@ -1,0 +1,3 @@
+module "trino" {
+  source = "./trino"
+}

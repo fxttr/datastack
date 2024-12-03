@@ -11,8 +11,8 @@ worker:
 catalogs:
   analytics: |-
     connector.name=clickhouse
-    connection-url=jdbc:clickhouse://clickhouse-01:8123/default
-    connection-user=default
+    connection-url=jdbc:clickhouse://clickhouse-01:8123/${ENV:CLICKHOUSE_DATABASE}
+    connection-user=${ENV:CLICKHOUSE_USERNAME}
     connection-password=${ENV:CLICKHOUSE_PASSWORD}
     clickhouse.map-string-as-varchar=true
   lake: |-
@@ -23,8 +23,8 @@ catalogs:
     iceberg.nessie-catalog.ref=main
     iceberg.nessie-catalog.default-warehouse-dir=s3://lake
     fs.native-s3.enabled=true
-    s3.endpoint=http://10.100.48.113:9000
-    s3.region=eu-central-1
+    s3.endpoint=http://${ENV:MINIO_ENDPOINT}
+    s3.region=${ENV:MINIO_REGION}
     s3.max-connections=3
     s3.streaming.part-size=32MB
     s3.tcp-keep-alive=false
