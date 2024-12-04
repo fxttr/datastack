@@ -1,6 +1,6 @@
 module "clickhouse_operator" {
   count      = var.install_clickhouse_operator ? 1 : 0
-  source     = "./clickhouse-operator"
+  source     = "./operator"
 
   clickhouse_operator_namespace = var.clickhouse_operator_namespace
   clickhouse_operator_version   = var.clickhouse_operator_version
@@ -9,7 +9,7 @@ module "clickhouse_operator" {
 module "clickhouse_cluster" {
   depends_on = [module.clickhouse_operator]
   count      = var.install_clickhouse_cluster ? 1 : 0
-  source     = "./clickhouse-cluster"
+  source     = "./cluster"
 
   clickhouse_cluster_name                = var.clickhouse_cluster_name
   clickhouse_cluster_namespace           = var.clickhouse_cluster_namespace

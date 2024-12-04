@@ -12,3 +12,4 @@ env/
 *.log
 .venv/
 .direnv/
+.terraform/

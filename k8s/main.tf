@@ -4,7 +4,6 @@ module "trino" {
 
 module "clickhouse" {
   source = "./clickhouse"
-  clickhouse_cluster_password = "D__246!dLnM"
 }
 
 module "dagster" {
