@@ -1,0 +1,17 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Spark Base Image
+      run: docker build . --file docker/spark/spark/Dockerfile.base --tag sparkbase:$(date +%s)
+    - name: Build the Spark Image
+      run: docker build . --file docker/spark/spark/Dockerfile --tag sparkbase:$(date +%s)
