@@ -24,9 +24,11 @@
           
           ${pkgs.opentofu}/bin/tofu "$@"
 
-          sops --encrypt terraform.tfstate > terraform.enc.tfstate
-          sops --encrypt terraform.tfstate.backup > terraform.enc.tfstate.backup
-
+          if [ '$@' != "plan" ]; then
+            sops --encrypt terraform.tfstate > terraform.enc.tfstate
+            sops --encrypt terraform.tfstate.backup > terraform.enc.tfstate.backup
+          fi
+          
           rm -f terraform.tfstate terraform.tfstate.backup
         '';
       in

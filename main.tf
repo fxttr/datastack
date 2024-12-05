@@ -2,7 +2,6 @@ module "k8s" {
   source = "./k8s"
 }
 
-
 terraform {
   required_version = ">= 1.0"
 
@@ -17,14 +16,9 @@ terraform {
       version = ">= 2.12.1"
     }
 
-    random = {
-      source  = "hashicorp/random"
-      version = ">= 3.6.0"
-    }
-
-    null = {
-      source  = "hashicorp/null"
-      version = ">= 3.2.2"
+    sops = {
+      source = "carlpett/sops"
+      version = ">=1.1.1"
     }
   }
 }
@@ -32,3 +26,11 @@ terraform {
 provider "kubernetes" {
  config_path = "~/.kube/config"
 }
+
+provider "helm" {
+  kubernetes {
+    config_path = "~/.kube/config"
+  }
+}
+
+provider "sops" {}

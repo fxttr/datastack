@@ -1,15 +1,16 @@
-.ipynb_checkpoints/
-__pycache__/
-.logs_queue/
-.nux/
-.telemetry/
-pipelines/storage/
-pipelines/schedules/
-pipelines/history/
-metastore_db/
 env/
-!doc/env/
 *.log
-.venv/
 .direnv/
 .terraform/
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# do not ignore encrypted tfstate files, with .enc inside
+!*.enc.tfstate
+!*.enc.tfstate.*
+
+# unless it is decrypted
+*.decrypted*tfstate
+*.decrypted*tfstate.*

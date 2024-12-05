@@ -1,27 +1,6 @@
-################################################################################
-# ClickHouse Cluster
-################################################################################
-variable "clickhouse_name" {
-  description = "Name of the ClickHouse release"
-  default     = ""
-  type        = string
-}
-
 variable "clickhouse_cluster_name" {
   description = "Name of the ClickHouse cluster"
   default     = "warehouse"
-  type        = string
-}
-
-variable "clickhouse_cluster_chart_version" {
-  description = "Version of the ClickHouse cluster helm chart version"
-  default     = "0.1.5"
-  type        = string
-}
-
-variable "clickhouse_keeper_chart_version" {
-  description = "Version of the ClickHouse Keeper cluster helm chart version"
-  default     = "0.1.5"
   type        = string
 }
 
@@ -43,45 +22,32 @@ variable "clickhouse_cluster_password" {
   default     = null
 }
 
-variable "clickhouse_cluster_instance_type" {
-  description = "Instance type for node selection"
-  type        = string
+variable "clickhouse_cluster_shards" {
+  description = "Number of shards"
+  type = number
+  default = 1
 }
 
-variable "clickhouse_cluster_enable_loadbalancer" {
-  description = "Enable waiting for the ClickHouse LoadBalancer to receive a hostname"
-  type        = bool
-  default     = true
+variable "clickhouse_cluster_replicas" {
+  description = "Number of replicas"
+  type = number
+  default = 1
 }
 
-################################################################################
-# K8S
-################################################################################
-variable "k8s_availability_zones" {
-  description = "The availability zones to deploy the ClickHouse cluster"
-  type        = list(string)
+variable "clickhouse_cluster_memory_limit" {
+  description = "Memory limit in GiB for the ClickHouse cluster"
+  type = number
+  default = 8
 }
 
-variable "k8s_cluster_endpoint" {
-  description = "The endpoint for the Kubernetes cluster"
-  type        = string
-  default     = ""
+variable "clickhouse_cluster_cpu_limit" {
+  description = "CPU limit for the ClickHouse cluster"
+  type = number
+  default = 4
 }
 
-variable "k8s_cluster_name" {
-  description = "The name of the Kubernetes cluster"
-  type        = string
-  default     = ""
-}
-
-variable "k8s_cluster_region" {
-  description = "The region of the Kubernetes cluster"
-  type        = string
-  default     = ""
-}
-
-variable "k8s_cluster_certificate_authority" {
-  description = "The certificate authority data for the Kubernetes cluster"
-  type        = string
-  default     = ""
+variable "clickhouse_cluster_storage_amount" {
+  description = "Request amount for ClickHouse cluster storage"
+  type = number
+  default = 80
 }

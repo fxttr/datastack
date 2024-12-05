@@ -1,9 +1,9 @@
 resource "kubernetes_namespace" "clickhouse" {
   metadata {
-    name = "clickhouse"
+    name = var.namespace
 
     labels = {
-      app = "clickhouse"
+      app = var.namespace
     }
   }
 }
