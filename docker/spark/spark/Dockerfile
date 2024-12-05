@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM sparkbase:latest
+FROM ghcr.io/fxttr/sparkbase:latest
 
 COPY ./scripts/entrypoint.sh .
 RUN chmod u+x ./entrypoint.sh 

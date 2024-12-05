@@ -9,9 +9,25 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: './docker/spark/spark/'
     steps:
     - uses: actions/checkout@v4
+
+    - name: 'Login to GitHub Container Registry'
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{github.actor}}
+        password: ${{secrets.REGISTRY_TOKEN}}
+
     - name: Build the Spark Base Image
-      run: cd docker/spark/spark/; docker build . --file Dockerfile.base --tag sparkbase:$(date +%s)
+      run: |
+        docker build . --file Dockerfile.base --tag ghcr.io/fxttr/sparkbase:latest
+        docker push ghcr.io/fxttr/sparkbase:latest
+
     - name: Build the Spark Image
-      run: cd docker/spark/spark/; docker build . --file Dockerfile --tag sparkbase:$(date +%s)
+      run: |
+        docker build . --file Dockerfile --tag ghcr.io/fxttr/spark:latest
+        docker push ghcr.io/fxttr/spark:latest
