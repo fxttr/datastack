@@ -12,6 +12,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Spark Base Image
-      run: docker build . --file docker/spark/spark/Dockerfile.base --tag sparkbase:$(date +%s)
+      run: cd docker/spark/spark/; docker build . --file Dockerfile.base --tag sparkbase:$(date +%s)
     - name: Build the Spark Image
-      run: docker build . --file docker/spark/spark/Dockerfile --tag sparkbase:$(date +%s)
+      run: cd docker/spark/spark/; docker build . --file Dockerfile --tag sparkbase:$(date +%s)
