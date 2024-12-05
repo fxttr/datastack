@@ -6,30 +6,38 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils }: 
-    flake-utils.lib.eachDefaultSystem (system: let 
-      pkgs = import nixpkgs { inherit system; }; 
-    in 
-    {
-      devShell = pkgs.mkShell {
-        buildInputs = [
-          pkgs.k9s
-          pkgs.opentofu
-          pkgs.python3
-          pkgs.python3Packages.virtualenv
-        ];
+  outputs = { self, nixpkgs, flake-utils }:
+    flake-utils.lib.eachDefaultSystem (system:
+      let
+        pkgs = import nixpkgs { inherit system; };
+        tofu = pkgs.writeShellScriptBin "tofu" ''
+          #!/usr/bin/env bash
+          set -euo pipefail
 
-        shellHook = ''
-          if [ ! -d .venv ]; then
-            echo "Creating virtual environment in .venv"
-            python -m venv .venv
+          if [ -f terraform.enc.tfstate ]; then
+            sops --decrypt terraform.enc.tfstate > terraform.tfstate
           fi
 
-          echo "Activating virtual environment"
-          source .venv/bin/activate
+          if [ -f terraform.enc.tfstate.backup ]; then
+            sops --decrypt terraform.enc.tfstate.backup > terraform.tfstate.backup
+          fi
+          
+          ${pkgs.opentofu}/bin/tofu "$@"
 
-          echo "You are now in the Python3 development environment with .venv"
+          sops --encrypt terraform.tfstate > terraform.enc.tfstate
+          sops --encrypt terraform.tfstate.backup > terraform.enc.tfstate.backup
+
+          rm -f terraform.tfstate terraform.tfstate.backup
         '';
-      };
-    });
+      in
+      {
+        devShell = pkgs.mkShell {
+          buildInputs = [
+            tofu
+            pkgs.k9s
+            pkgs.nano
+            pkgs.sops
+          ];
+        };
+      });
 }
