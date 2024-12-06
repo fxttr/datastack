@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM sparkbase:latest
+FROM ghcr.io/fxttr/sparkbase:latest
 
 RUN apt update && apt upgrade -y && \
   apt install -y --no-install-recommends \
