@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: './docker/spark/spark/'
+        working-directory: './docker/spark/'
     steps:
     - uses: actions/checkout@v4
 

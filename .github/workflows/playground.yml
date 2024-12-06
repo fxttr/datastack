@@ -1,0 +1,32 @@
+name: Playground Docker Image CI
+
+on:
+  push:
+    branches: [ "master" ]
+    paths:
+      - ./docker/playground/**
+  pull_request:
+    branches: [ "master" ]
+    paths:
+      - ./docker/playground/**
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: './docker/playground/'
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: 'Login to GitHub Container Registry'
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{github.actor}}
+        password: ${{secrets.REGISTRY_TOKEN}}
+
+    - name: Build the Playground Image
+      run: |
+        docker build . --file Dockerfile --tag ghcr.io/fxttr/playground:latest
+        docker push ghcr.io/fxttr/playground:latest
