@@ -1,10 +1,14 @@
-name: Docker Image CI
+name: Spark Docker Image CI
 
 on:
   push:
     branches: [ "master" ]
+    paths:
+      - ./docker/spark/**
   pull_request:
     branches: [ "master" ]
+    paths:
+      - ./docker/spark/**
 
 jobs:
   build:
