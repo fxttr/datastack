@@ -1,19 +1,20 @@
 resource "helm_release" "nessie" {
-  name       = "nessie"
-  chart      = "nessie"
-  repository = "https://charts.projectnessie.org"
+    name       = "nessie"
+    chart      = "nessie"
+    repository = "https://charts.projectnessie.org"
+    namespace = "trino"
   
-  values = [
-    yamlencode({
-      versionStoreType = "JDBC"
-      jdbc = {
-        jdbcUrl = "jdbc:postgresql://postgres:5432/${var.postgres_db}?currentSchema=nessie"
-        secret = {
-          name     = "postgres-creds"
-          username = "${var.postgres_user}"
-          password = "${var.postgres_password}"
+    values = [
+        yamlencode({
+        versionStoreType = "JDBC"
+        jdbc = {
+            jdbcUrl = "jdbc:postgresql://nessie-postgres.trino.svc.cluster.local:5432/${var.postgres_db}?currentSchema=nessie"
+            secret = {
+                name     = "nessie-postgres-creds"
+                username = "postgres_username"
+                password = "postgres_password"
+            }
         }
-      }
-    })
-  ]
+        })
+    ]
 }

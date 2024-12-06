@@ -1,6 +1,7 @@
 resource "kubernetes_deployment" "nessie_postgres" {
   metadata {
     name = "nessie-postgres"
+    namespace = "trino"
   }
 
   spec {
@@ -31,7 +32,7 @@ resource "kubernetes_deployment" "nessie_postgres" {
 
           env_from {
             config_map_ref {
-              name = "postgres-secret"
+              name = "nessie-postgres-secret"
             }
           }
 
@@ -39,13 +40,21 @@ resource "kubernetes_deployment" "nessie_postgres" {
             name       = "postgresdata"
             mount_path = "/var/lib/postgresql/data"
           }
+
+          lifecycle {
+            post_start {
+              exec {
+                command = ["/bin/bash","-c","sleep 20 && PGPASSWORD=${var.postgres_password} psql ${var.postgres_db} -U ${var.postgres_user} -c 'CREATE SCHEMA IF NOT EXISTS nessie;'"]
+              }
+            }
+          }
         }
 
         volume {
           name = "postgresdata"
 
           persistent_volume_claim {
-            claim_name = "postgres-volume-claim"
+            claim_name = "nessie-postgres-volume-claim"
           }
         }
       }

@@ -12,8 +12,6 @@
         pkgs = import nixpkgs { inherit system; };
         tofu = pkgs.writeShellScriptBin "tofu" ''
           #!/usr/bin/env bash
-          set -euo pipefail
-
           if [ -f terraform.enc.tfstate ]; then
             sops --decrypt terraform.enc.tfstate > terraform.tfstate
           fi

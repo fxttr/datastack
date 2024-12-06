@@ -1,6 +1,7 @@
 resource "kubernetes_config_map" "nessie_postgres_secret" {
   metadata {
-    name      = "postgres-secret"
+    name      = "nessie-postgres-secret"
+    namespace = "trino"
     labels = {
       app = "nessie-postgres"
     }

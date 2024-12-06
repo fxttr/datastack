@@ -1,9 +1,9 @@
 resource "kubernetes_persistent_volume" "nessie_postgres_volume" {
   metadata {
-    name = "postgres-volume"
+    name = "nessie-postgres-volume"
     labels = {
-      type = "local"
-      app  = "nessie-postgres"
+        type = "local"
+        app  = "nessie-postgres"
     }
   }
 
@@ -18,7 +18,7 @@ resource "kubernetes_persistent_volume" "nessie_postgres_volume" {
 
     persistent_volume_source {
         host_path {
-            path = "/data/postgresql"
+            path = "/var/mnt/nessie/postgresql"
         }
     }
   }

@@ -1,8 +1,9 @@
 resource "kubernetes_service" "nessie_postgres" {
   metadata {
     name = "nessie-postgres"
+    namespace = "trino"
     labels = {
-      app = "nessie-postgres"
+        app = "nessie-postgres"
     }
   }
 

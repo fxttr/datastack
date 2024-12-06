@@ -1,8 +1,9 @@
 resource "kubernetes_persistent_volume_claim" "nessie_postgres_volume_claim" {
   metadata {
-    name = "postgres-volume-claim"
+    name = "nessie-postgres-volume-claim"
+    namespace = "trino"
     labels = {
-      app = "nessie-postgres"
+        app = "nessie-postgres"
     }
   }
 
