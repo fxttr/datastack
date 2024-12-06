@@ -37,6 +37,8 @@
             pkgs.k9s
             pkgs.nano
             pkgs.sops
+            pkgs.kubectl
+            pkgs.kubernetes-helm
           ];
         };
       });

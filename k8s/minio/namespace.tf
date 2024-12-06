@@ -1,4 +1,4 @@
-resource "kubernetes_namespace" "clickhouse" {
+resource "kubernetes_namespace" "minio" {
   metadata {
     name = var.namespace
 
