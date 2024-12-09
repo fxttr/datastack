@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nessie-database
+  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nessie-database
+  template:
+    metadata:
+      labels:
+        app: nessie-database
+    spec:
+      containers:
+      - name: nessie-database
+        image: postgres:17
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "500Mi"
+            cpu: "1"
+          limits:
+            memory: "2Gi"
+            cpu: "4"
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: nessie-database-creds
+              key: db
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: nessie-database-creds
+              key: username
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: nessie-database-creds
+              key: password
+        volumeMounts:
+        - name: postgresdata
+          mountPath: /var/lib/postgresql/data
+        lifecycle:
+          postStart:
+            exec:
+              command: 
+              - /bin/bash
+              - -c
+              - sleep 20 && PGPASSWORD=${POSTGRES_PASSWORD} psql ${POSTGRES_DB} -U ${POSTGRES_USER} -c 'CREATE SCHEMA IF NOT EXISTS nessie;'
+      volumes:
+      - name: postgresdata
+        persistentVolumeClaim:
+          claimName: nessie-database-pvc
