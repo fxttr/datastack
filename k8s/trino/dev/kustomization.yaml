@@ -1,0 +1,53 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../base/
+
+helmCharts:
+- name: trino
+  repo: https://trinodb.github.io/charts
+  releaseName: trino
+  version: 1.35.0
+  valuesInline:
+    image:
+      tag: "467"
+    server:
+      workers: 3
+      config:
+        https:
+          enabled: true
+        query:
+          maxMemory: "8GB"
+    auth:
+      passwordAuth: "admin:$2a$12$sPL5pRuPJ8c4wORRsyHRnunX8XzdI4SFbK/Y84S4WWULtrUT6OiFK"
+    coordinator:
+      jvm:
+        maxHeapSize: "8G"
+    worker:
+      jvm:
+        maxHeapSize: "8G"
+    catalogs:
+      analytics: |-
+        connector.name=clickhouse
+        connection-url=jdbc:clickhouse://clickhouse-01:8123/${ENV:CLICKHOUSE_DATABASE}
+        connection-user=${ENV:CLICKHOUSE_USERNAME}
+        connection-password=${ENV:CLICKHOUSE_PASSWORD}
+      lake: |-
+        iceberg.catalog.type=nessie
+        iceberg.file-format=PARQUET
+        iceberg.nessie-catalog.uri=http://nessie:19120/api/v2
+        iceberg.nessie-catalog.ref=main
+        iceberg.nessie-catalog.default-warehouse-dir=s3://lake
+        fs.native-s3.enabled=true
+        s3.endpoint=http://${ENV:MINIO_ENDPOINT}
+        s3.region=
+        s3.max-connections=3
+        s3.streaming.part-size=32MB
+        s3.tcp-keep-alive=false
+        s3.path-style-access=true
+        s3.aws-access-key=${ENV:MINIO_ACCESS_KEY}
+        s3.aws-secret-key=${ENV:MINIO_SECRET_KEY}
+    envFrom:
+      - secretRef:
+          name: trino-secret-env
