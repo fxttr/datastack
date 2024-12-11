@@ -4,3 +4,4 @@ metadata:
   name: datastack-devel
   labels:
     app: datastack
+    pod-security.kubernetes.io/enforce: privileged

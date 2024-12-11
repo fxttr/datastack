@@ -3,17 +3,3 @@ kind: Kustomization
 
 resources:
   - ../base/
-
-helmCharts:
-- name: nessie
-  repo: https://charts.projectnessie.org
-  releaseName: nessie
-  
-  valuesInline:
-    versionStoreType: "JDBC"
-    jdbc:
-      jdbcUrl: "jdbc:postgresql://dev-nessie-database.datastack.svc.cluster.local:5432/nessie?currentSchema=nessie"
-      secret:
-        name: "nessie-database-creds"
-        username: "username"
-        password: "password"

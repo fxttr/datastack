@@ -3,3 +3,16 @@ kind: Kustomization
 
 resources:
   - manifest.yaml
+  - secrets.yaml
+  - zookeeper.yaml
+
+helmCharts:
+- name: altinity-clickhouse-operator
+  repo: https://altinity.github.io/clickhouse-operator
+  releaseName: altinity-clickhouse-operator
+  version: 0.24.1
+  valuesInline:
+    clickhouse:
+      access:
+        secret:
+          name: "clickhouse-operator-secret"

@@ -8,13 +8,30 @@ spec:
       volumeClaimTemplate: pvc-template
   configuration:
     users:
-      default/password: 1234
-      default/networks/ip:
+      marrero/password: 
+        valueFrom:
+          secretKeyRef:
+            name: clickhouse-user-secret
+            key: password
+      marrero/networks/ip:
         - 0.0.0.0/24
+    settings:
+          s3/warehouse/endpoint: "http://minio:9000/warehouse/"
+          s3/warehouse/secret_access_key:
+            valueFrom:
+              secretKeyRef:
+                name: storage-user
+                key: CONSOLE_ACCESS_KEY
+          s3/warehouse/access_key:
+            valueFrom:
+              secretKeyRef:
+                name: storage-user
+                key: CONSOLE_SECRET_KEY
     zookeeper:
       nodes:
-        - host: zookeeper1.datastack.svc.cluster.local
-        - host: zookeeper2.datastack.svc.cluster.local
+        - host: zookeeper-0.zookeepers
+        - host: zookeeper-1.zookeepers
+        - host: zookeeper-2.zookeepers
     clusters:
       - name: cluster1
         layout:
@@ -35,8 +52,8 @@ spec:
                   memory: "2Gi"
                   cpu: "1"
                 limits:
-                  memory: "your-memory-limit-Gi"
-                  cpu: "your-cpu-limit"
+                  memory: "8Gi"
+                  cpu: "4"
               volumeMounts:
                 - name: clickhouse-data
                   mountPath: /var/lib/clickhouse

@@ -7,3 +7,17 @@ resources:
   - pvc.yaml
   - secrets.yaml
   - service.yaml
+
+helmCharts:
+- name: nessie
+  repo: https://charts.projectnessie.org
+  releaseName: nessie
+  
+  valuesInline:
+    versionStoreType: "JDBC"
+    jdbc:
+      jdbcUrl: "jdbc:postgresql://nessie-database:5432/nessie?currentSchema=nessie"
+      secret:
+        name: "nessie-database-creds"
+        username: "username"
+        password: "password"
