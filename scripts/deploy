@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+kubectl kustomize dev --enable-helm | kubectl apply -f -
