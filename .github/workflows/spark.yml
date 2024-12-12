@@ -27,11 +27,6 @@ jobs:
         username: ${{github.actor}}
         password: ${{secrets.REGISTRY_TOKEN}}
 
-    - name: Build the Spark Base Image
-      run: |
-        docker build . --file Dockerfile.base --tag ghcr.io/fxttr/sparkbase:latest
-        docker push ghcr.io/fxttr/sparkbase:latest
-
     - name: Build the Spark Image
       run: |
         docker build . --file Dockerfile --tag ghcr.io/fxttr/spark:latest
