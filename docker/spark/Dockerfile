@@ -63,7 +63,7 @@ RUN curl https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.12.2
 RUN curl https://repo1.maven.org/maven2/software/amazon/awssdk/url-connection-client/2.27.7/url-connection-client-2.27.7.jar -Lo ${SPARK_HOME}/jars/url-connection-client-2.27.7.jar
 RUN curl https://repo1.maven.org/maven2/software/amazon/awssdk/s3-transfer-manager/2.27.7/s3-transfer-manager-2.27.7.jar -Lo ${SPARK_HOME}/jars/s3-transfer-manager-2.27.7.jar
 # Install AWS CLI
-RUN curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip && unzip awscliv2.zip && sudo ./aws/install && rm awscliv2.zip && rm -rf aws/
+RUN curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip && unzip awscliv2.zip && ./aws/install && rm awscliv2.zip && rm -rf aws/
 # Download SAP HANA driver
 RUN curl https://repo1.maven.org/maven2/com/sap/cloud/db/jdbc/ngdbc/2.21.11/ngdbc-2.21.11.jar -Lo ${SPARK_HOME}/jars/ngdbc.jar
 # Download MSSQL jdbc
