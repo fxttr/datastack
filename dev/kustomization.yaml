@@ -4,7 +4,8 @@ kind: Kustomization
 namespace: datastack-devel
 resources:
   - namespace.yaml
-  #- ../k8s/nessie/dev/
-  #- ../k8s/minio/dev/
-  - ../k8s/clickhouse/dev/
-  #- ../k8s/trino/dev/
+  - ../k8s/nessie/dev/
+  - ../k8s/minio/dev/
+  #- ../k8s/clickhouse/dev/
+  - ../k8s/dagster/dev/
+  - ../k8s/trino/dev/
