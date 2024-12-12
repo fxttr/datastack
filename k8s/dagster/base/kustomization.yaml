@@ -1,7 +1,12 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-resources: []
+resources: 
+  - deployment.yaml
+  - pv.yaml
+  - pvc.yaml
+  - secrets.yaml
+  - service.yaml
 
 helmCharts:
 - name: dagster
@@ -9,5 +14,23 @@ helmCharts:
   releaseName: dagster
   includeCRDs: true
   valuesInline:
+    global:
+      postgresqlSecretName: dagster-database-creds
     dagster-user-deployments:
       enabled: true
+    generatePostgresqlPasswordSecret: false
+    postgresql:
+      enabled: false # this disables the internal postgresql. We are using the external one.
+      image:
+        repository: "library/postgres"
+        tag: "14.6"
+        pullPolicy: IfNotPresent
+      postgresqlHost: "dagster-database"
+      postgresqlUsername: dagster
+      postgresqlDatabase: "dagster"
+      postgresqlParams: {}
+      postgresqlScheme: ""
+      volumePermissions:
+        enabled: true
+      service:
+        port: 5432

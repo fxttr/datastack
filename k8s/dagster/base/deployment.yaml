@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dagster-database
+  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dagster-database
+  template:
+    metadata:
+      labels:
+        app: dagster-database
+    spec:
+      containers:
+      - name: dagster-database
+        image: postgres:17
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "500Mi"
+            cpu: "1"
+          limits:
+            memory: "2Gi"
+            cpu: "4"
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          value: dagster
+        - name: POSTGRES_USER
+          value: dagster
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: dagster-database-creds
+              key: postgresql-password
+        volumeMounts:
+        - name: postgresdata
+          mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: postgresdata
+        persistentVolumeClaim:
+          claimName: dagster-database-pvc
