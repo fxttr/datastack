@@ -25,8 +25,7 @@ RUN set -ex && \
   apt update && \
   apt upgrade -y && \
   apt install -y --no-install-recommends \
-  bash tini libc6 libpam-modules krb5-user libnss3 procps net-tools ssh rsync && \
-  rm -rf /var/lib/apt/lists/* && \
+  bash tini libc6 libpam-modules krb5-user libnss3 procps net-tools ssh rsync unzip && \
   mkdir -p ${SPARK_HOME} && \
   mkdir -p ${SPARK_HOME}/examples && \
   mkdir -p ${SPARK_HOME}/work-dir && \
