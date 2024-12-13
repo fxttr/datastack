@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spark-history-server
+  labels:
+    app: spark
+    component: history-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spark
+      component: history-server
+  template:
+    metadata:
+      labels:
+        app: spark
+        component: history-server
+    spec:
+      serviceAccountName: spark
+      imagePullSecrets:
+        - name: dockerconfigjson
+      containers:
+        - name: spark-history-server
+          image: ghcr.io/fxttr/spark:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 18080
+          env:
+            - name: SPARK_MODE
+              value: "history-server"
+            - name: SPARK_HISTORY_OPTS
+              value: "-Dspark.history.fs.logDirectory=/opt/spark/logs -Dspark.history.ui.port=18080"
+          envFrom:
+            - secretRef:
+                name: spark-env
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "1"
+            limits:
+              memory: "4Gi"
+              cpu: "2"
+          volumeMounts:
+            - mountPath: /opt/spark/logs
+              name: spark-logs
+      volumes:
+        - name: spark-logs
+          emptyDir: {}

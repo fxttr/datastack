@@ -9,3 +9,4 @@ resources:
   #- ../k8s/clickhouse/dev/
   - ../k8s/dagster/dev/
   - ../k8s/trino/dev/
+  - ../k8s/spark/dev/

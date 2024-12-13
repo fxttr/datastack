@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: spark-history-server
+  labels:
+    app: spark
+spec:
+  ports:
+    - port: 18080
+      name: history-server-ui
+  selector:
+    app: spark
+    component: history-server
+  type: LoadBalancer

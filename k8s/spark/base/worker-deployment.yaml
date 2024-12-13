@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spark-worker
+  labels:
+    app: spark
+    component: worker
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: spark
+      component: worker
+  template:
+    metadata:
+      labels:
+        app: spark
+        component: worker
+    spec:
+      serviceAccountName: spark
+      imagePullSecrets:
+        - name: dockerconfigjson
+      containers:
+        - name: spark-worker
+          image: ghcr.io/fxttr/spark:latest
+          imagePullPolicy: Always
+          command: ["start-worker.sh"]
+          ports:
+            - containerPort: 8081
+          env:
+            - name: SPARK_MODE
+              value: "worker"
+            - name: SPARK_WORKER_CORES
+              value: "6"
+            - name: SPARK_WORKER_MEMORY
+              value: "8G"
+            - name: SPARK_DRIVER_MEMORY
+              value: "8G"
+            - name: SPARK_EXECUTOR_MEMORY
+              value: "8G"
+            - name: SPARK_NO_DAEMONIZE
+              value: "true"
+            - name: SPARK_MASTER_URL
+              value: "spark://spark-master:7077"
+          envFrom:
+            - secretRef:
+                name: spark-env
+          resources:
+            requests:
+              memory: "4Gi"
+              cpu: "2"
+            limits:
+              memory: "8Gi"
+              cpu: "4"
+          volumeMounts:
+            - mountPath: /opt/spark/logs
+              name: spark-logs
+      volumes:
+        - name: spark-logs
+          emptyDir: {}

@@ -4,6 +4,11 @@ kind: Kustomization
 resources:
   - service-accounts.yaml
   - cluster-role-bindings.yaml
-  - services.yaml
-  - deployments.yaml
+  - cluster-role.yaml
+  - master-deployment.yaml
+  - master-service.yaml
+  - worker-deployment.yaml
+  - worker-service.yaml
+  - history-server-deployment.yaml
+  - history-server-service.yaml
   - secrets.yaml

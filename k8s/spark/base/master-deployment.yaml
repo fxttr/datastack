@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spark-master
+  labels:
+    app: spark
+    component: master
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spark
+      component: master
+  template:
+    metadata:
+      labels:
+        app: spark
+        component: master
+    spec:
+      serviceAccountName: spark
+      imagePullSecrets:
+        - name: dockerconfigjson
+      containers:
+        - name: spark-master
+          image: ghcr.io/fxttr/spark:latest
+          imagePullPolicy: Always
+          #command: ["start-master.sh"]
+          command: [ "/bin/bash", "-c", "--" ]
+          args: [ "while true; do sleep 30; done;" ]
+          ports:
+            - containerPort: 7077
+            - containerPort: 8080
+          env:
+            - name: SPARK_MODE
+              value: "master"
+            - name: SPARK_MASTER_PORT
+              value: "7077"
+            - name: SPARK_MASTER_WEBUI_PORT
+              value: "8080"
+          envFrom:
+            - secretRef:
+                name: spark-env
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: "1"
+            limits:
+              memory: "4Gi"
+              cpu: "2"
+          volumeMounts:
+            - mountPath: /opt/spark/logs
+              name: spark-logs
+      volumes:
+        - name: spark-logs
+          emptyDir: {}
