@@ -6,7 +6,6 @@ FROM eclipse-temurin:${java_image_tag}
 
 ARG USERNAME=spark
 ARG USER_UID=185
-ARG GROUP_UID=185
 
 ENV SPARK_VERSION=3.5.2
 ENV SPARK_MAJOR_VERSION=3.5
@@ -79,12 +78,14 @@ COPY conf/spark-defaults.conf ${SPARK_HOME}/conf
 COPY scripts/entrypoint.sh /opt/entrypoint.sh
 COPY scripts/decom.sh /opt/decom.sh
 
-USER ${USER_UID}
+RUN useradd --uid $USER_UID -M -U -s /bin/false $USERNAME
 
 RUN chmod g+w ${SPARK_HOME}
 RUN chmod a+x /opt/decom.sh
-RUN chmod u+x /opt/entrypoint.sh
-RUN chmod u+x ${SPARK_HOME}/* 
-RUN chmod u+x ${SPARK_HOME}/bin/*
+RUN chmod a+x /opt/entrypoint.sh
+RUN chmod a+x ${SPARK_HOME}/* 
+RUN chmod a+x ${SPARK_HOME}/bin/*
 
 ENTRYPOINT [ "/opt/entrypoint.sh" ]
+
+USER ${USER_UID}
