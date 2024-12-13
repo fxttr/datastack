@@ -79,8 +79,6 @@ COPY conf/spark-defaults.conf ${SPARK_HOME}/conf
 COPY scripts/entrypoint.sh /opt/entrypoint.sh
 COPY scripts/decom.sh /opt/decom.sh
 
-RUN useradd --uid $USER_UID --gid $USER_GID -M -U -s /bin/false $USERNAME
-
 USER ${USER_UID}
 
 RUN chmod g+w ${SPARK_HOME}
