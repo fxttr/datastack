@@ -78,13 +78,12 @@ COPY conf/spark-defaults.conf ${SPARK_HOME}/conf
 COPY scripts/entrypoint.sh /opt/entrypoint.sh
 COPY scripts/decom.sh /opt/decom.sh
 
-RUN useradd --uid $USER_UID -M -U -s /bin/false $USERNAME
+RUN useradd --uid ${USER_UID} -M -U -s /bin/false ${USERNAME}
 
-RUN chmod g+w ${SPARK_HOME}
+RUN chown -R ${USERNAME} ${SPARK_HOME}
+RUN chmod -R u+rwx ${SPARK_HOME}
 RUN chmod a+x /opt/decom.sh
 RUN chmod a+x /opt/entrypoint.sh
-RUN chmod a+x ${SPARK_HOME}/* 
-RUN chmod a+x ${SPARK_HOME}/bin/*
 
 ENTRYPOINT [ "/opt/entrypoint.sh" ]
 

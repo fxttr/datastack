@@ -24,11 +24,17 @@ spec:
         - name: spark-worker
           image: ghcr.io/fxttr/spark:latest
           imagePullPolicy: Always
-          command: ["start-worker.sh"]
+          command:
+            - bash
+            - -c
+          args: [ "start-worker.sh spark://spark-master:7077 --webui-port 8001" ]
           ports:
             - containerPort: 8081
+              protocol: TCP
           env:
             - name: SPARK_MODE
+              value: "worker"
+            - name: SPARK_WORKLOAD
               value: "worker"
             - name: SPARK_WORKER_CORES
               value: "6"
@@ -40,6 +46,8 @@ spec:
               value: "8G"
             - name: SPARK_NO_DAEMONIZE
               value: "true"
+            - name: SPARK_WORKER_PORT
+              value: "7000"
             - name: SPARK_MASTER_URL
               value: "spark://spark-master:7077"
           envFrom:

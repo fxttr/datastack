@@ -24,11 +24,15 @@ spec:
         - name: spark-history-server
           image: ghcr.io/fxttr/spark:latest
           imagePullPolicy: Always
+          command: 
+            - "start-history-server.sh"
           ports:
             - containerPort: 18080
           env:
             - name: SPARK_MODE
               value: "history-server"
+            - name: SPARK_NO_DAEMONIZE
+              value: "true"
             - name: SPARK_HISTORY_OPTS
               value: "-Dspark.history.fs.logDirectory=/opt/spark/logs -Dspark.history.ui.port=18080"
           envFrom:
