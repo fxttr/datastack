@@ -51,9 +51,6 @@ spec:
             - secretRef:
                 name: spark-env
           resources:
-            requests:
-              memory: "2Gi"
-              cpu: "1"
             limits:
               memory: "4Gi"
               cpu: "2"
@@ -82,9 +79,6 @@ spec:
             - secretRef:
                 name: spark-env
           resources:
-            requests:
-              memory: "1Gi"
-              cpu: "1"
             limits:
               memory: "4Gi"
               cpu: "2"

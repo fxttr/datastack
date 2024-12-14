@@ -10,3 +10,4 @@ resources:
   #- ../k8s/dagster/dev/
   #- ../k8s/trino/dev/
   - ../k8s/spark/dev/
+  - ../k8s/traefik/dev/

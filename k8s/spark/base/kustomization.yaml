@@ -10,3 +10,4 @@ resources:
   - worker-deployment.yaml
   - worker-service.yaml
   - secrets.yaml
+  - ingress.yaml

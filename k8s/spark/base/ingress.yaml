@@ -1,0 +1,15 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: spark-ingress
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /spark
+        pathType: Prefix
+        backend:
+          service:
+            name: spark-master
+            port:
+              name: spark-ui
