@@ -10,7 +10,8 @@ spec:
       name: spark-master
     - port: 8080
       name: spark-ui
+    - port: 18080
+      name: history-server-ui
   selector:
     app: spark
     component: master
-  clusterIP: None # Headless service for easier resolution

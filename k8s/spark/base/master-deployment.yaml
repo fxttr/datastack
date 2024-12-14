@@ -20,6 +20,12 @@ spec:
       serviceAccountName: spark
       imagePullSecrets:
         - name: dockerconfigjson
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 185
+        runAsGroup: 185
+        seccompProfile:
+          type: "RuntimeDefault"
       containers:
         - name: spark-master
           image: ghcr.io/fxttr/spark:latest
@@ -54,6 +60,41 @@ spec:
           volumeMounts:
             - mountPath: /opt/spark/logs
               name: spark-logs
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+        - name: spark-history-server
+          image: ghcr.io/fxttr/spark:latest
+          imagePullPolicy: Always
+          command: 
+            - "start-history-server.sh"
+          ports:
+            - containerPort: 18080
+          env:
+            - name: SPARK_MODE
+              value: "history-server"
+            - name: SPARK_NO_DAEMONIZE
+              value: "true"
+            - name: SPARK_HISTORY_OPTS
+              value: "-Dspark.history.fs.logDirectory=/opt/spark/logs -Dspark.history.ui.port=18080"
+          envFrom:
+            - secretRef:
+                name: spark-env
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "1"
+            limits:
+              memory: "4Gi"
+              cpu: "2"
+          volumeMounts:
+            - mountPath: /opt/spark/logs
+              name: spark-logs
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
       volumes:
         - name: spark-logs
           emptyDir: {}

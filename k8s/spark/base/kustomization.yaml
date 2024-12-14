@@ -9,6 +9,4 @@ resources:
   - master-service.yaml
   - worker-deployment.yaml
   - worker-service.yaml
-  - history-server-deployment.yaml
-  - history-server-service.yaml
   - secrets.yaml

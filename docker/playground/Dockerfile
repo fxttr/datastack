@@ -1,6 +1,11 @@
 # syntax=docker/dockerfile:1
 FROM ghcr.io/fxttr/spark:latest
 
+ARG USERNAME=spark
+ARG USER_UID=185
+
+USER root
+
 RUN apt update && apt upgrade -y && \
   apt install -y --no-install-recommends \
   python3 \
@@ -29,8 +34,10 @@ COPY conf/ipython/startup/README /root/.ipython/profile_default/startup
 COPY conf/notebook ${BIN_DIR}/notebook
 COPY conf/notebook ${BIN_DIR}/pyspark-notebook
 
-RUN chmod u+x ${BIN_DIR}/notebook && chmod u+x ${BIN_DIR}/pyspark-notebook
+RUN chown ${USERNAME} ${BIN_DIR}/notebook && chmod u+x ${BIN_DIR}/notebook
+RUN chown ${USERNAME} ${BIN_DIR}/pyspark-notebook && chmod u+x ${BIN_DIR}/pyspark-notebook
 
 EXPOSE 8888
 
+USER ${USER_UID}
 CMD ["notebook"]
